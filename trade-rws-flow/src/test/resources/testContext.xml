@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+    
+    
+    <!-- 扫描注解Bean -->
+    <context:component-scan base-package="com.midea.trade.rws">
+    </context:component-scan>
+    
+	<!-- <aop:aspectj-autoproxy expose-proxy="true" /> -->
+	
+	<!-- true 基于类的代理  cglib -->
+  	<tx:annotation-driven transaction-manager="txManager" order="10000"  />
+        
+    <bean id="writeDataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://10.16.11.200:3306/ins_tc_prd" />
+        <property name="username" value="kudiaosi" />
+        <property name="password" value="kudiaosi0" />
+        <property name="maxActive"><value>20</value></property>   
+        <property name="initialSize"><value>5</value></property>   
+        <property name="maxWait"><value>30000</value></property>        <!-- 超时等待时间  以毫秒为单位 --> 
+        <property name="maxIdle"><value>20</value></property>            <!-- 最大空闲连接 -->
+        <property name="minIdle"><value>5</value></property>             <!-- 最小空闲连接 -->
+        <property name="removeAbandoned"><value>true</value></property>  <!-- 是否自动回收超时连接 --> 
+        <property name="removeAbandonedTimeout"><value>30</value></property>  <!-- 超时时间(以秒数为单位) --> 
+        <property name="testWhileIdle"><value>true</value></property>    <!-- 打开检查,用异步线程evict进行检查 -->   
+        <property name="testOnBorrow"><value>true</value></property>   
+        <property name="testOnReturn"><value>false</value></property>   
+        <property name="validationQuery"><value>select 1</value></property>          
+        <property name="numTestsPerEvictionRun"><value>20</value></property>  
+        <property name="minEvictableIdleTimeMillis"><value>1800000</value></property>        
+    </bean>
+    
+    <bean id="readDataSource1" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://172.16.14.168:3306/ins_tc_prd" />
+        <property name="username" value="root" />
+        <property name="password" value="Midea_2014@TC" />
+        <property name="maxActive"><value>20</value></property>   
+        <property name="initialSize"><value>5</value></property>   
+        <property name="maxWait"><value>30000</value></property>        <!-- 超时等待时间  以毫秒为单位 --> 
+        <property name="maxIdle"><value>20</value></property>            <!-- 最大空闲连接 -->
+        <property name="minIdle"><value>5</value></property>             <!-- 最小空闲连接 -->
+        <property name="removeAbandoned"><value>true</value></property>  <!-- 是否自动回收超时连接 --> 
+        <property name="removeAbandonedTimeout"><value>30</value></property>  <!-- 超时时间(以秒数为单位) --> 
+        <property name="testWhileIdle"><value>true</value></property>    <!-- 打开检查,用异步线程evict进行检查 -->   
+        <property name="testOnBorrow"><value>true</value></property>   
+        <property name="testOnReturn"><value>false</value></property>   
+        <property name="validationQuery"><value>select 1</value></property>          
+        <property name="numTestsPerEvictionRun"><value>20</value></property>  
+        <property name="minEvictableIdleTimeMillis"><value>1800000</value></property>        
+    </bean>
+    
+    
+    <bean id="readDataSource2" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://172.16.14.165:3306/ins_tc_prd" />
+        <property name="username" value="root" />
+        <property name="password" value="Midea_2014@TC" />
+        <property name="maxActive"><value>20</value></property>   
+        <property name="initialSize"><value>5</value></property>   
+        <property name="maxWait"><value>30000</value></property>        <!-- 超时等待时间  以毫秒为单位 --> 
+        <property name="maxIdle"><value>20</value></property>            <!-- 最大空闲连接 -->
+        <property name="minIdle"><value>5</value></property>             <!-- 最小空闲连接 -->
+        <property name="removeAbandoned"><value>true</value></property>  <!-- 是否自动回收超时连接 --> 
+        <property name="removeAbandonedTimeout"><value>30</value></property>  <!-- 超时时间(以秒数为单位) --> 
+        <property name="testWhileIdle"><value>true</value></property>    <!-- 打开检查,用异步线程evict进行检查 -->   
+        <property name="testOnBorrow"><value>true</value></property>   
+        <property name="testOnReturn"><value>false</value></property>   
+        <property name="validationQuery"><value>select 1</value></property>          
+        <property name="numTestsPerEvictionRun"><value>20</value></property>  
+        <property name="minEvictableIdleTimeMillis"><value>1800000</value></property>        
+    </bean>
+    
+    
+    
+         <bean id="userMapper" class="com.midea.trade.rws.mapper.UserMapperImpl">
+    </bean>
+	    
+    <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="groupDataSource"/>
+    </bean>
+	    
+	 <bean id="dsconfDO" class="com.midea.trade.rws.util.DsConfDO">
+	 	<property name="writeRestrictTimes" value="0"/><!-- 时间范围内写限制次数 -->
+	 	<property name="readRestrictTimes" value="0"/><!-- 时间范围内读限制次数 -->
+	 	<property name="timeSliceInMillis" value="0"/><!-- 时间范围不能小于1000ms -->
+	 	<property name="maxConcurrentReadRestrict" value="0"/><!-- 最大并发读限制 -->
+	 	<property name="maxConcurrentWriteRestrict" value="0"/><!-- 最大并发写限制 -->
+	 </bean>  
+	 
+	    <bean id="fetcher" class="com.midea.trade.rws.util.SpringDataSourceFetcher"/>
+	    
+	    <bean id="groupDataSource" class="com.midea.trade.rws.group.TGroupDataSource">
+	        <constructor-arg name="dsKeyAndWeightCommaArray" value="writeDataSource:wrq1,readDataSource1:rp3,readDataSource2:rp3"/>  
+		    <constructor-arg ref="fetcher"/> 
+		    <constructor-arg ref="dsconfDO"/> 
+		</bean>
+    
+    
+    
+    
+  <!--   <bean id="readWriteDataSource" class="com.midea.trade.rws.DynamicDataSource">
+        <property name="writeDataSource" ref="writeDataSource"/>
+        <property name="readDataSourceMap">
+           <map>
+              <entry key="readDataSource1" value-ref="readDataSource1"/>
+           </map>
+        </property>
+    </bean>
+     -->
+	
+    <!-- 
+    <aop:config expose-proxy="true">
+        只对业务逻辑层实施事务
+        <aop:pointcut id="txPointcut" expression="execution(* com.midea.trade.rws.service.*.*(..))" />
+         <aop:advisor  order="2" advice-ref="txAdvice" pointcut-ref="txPointcut"/>
+    </aop:config>
+    
+    
+    
+    <tx:advice id="txAdvice" transaction-manager="txManager">
+        <tx:attributes>
+            <tx:method name="save*" propagation="REQUIRED" />
+            <tx:method name="add*" propagation="REQUIRED" />
+            <tx:method name="create*" propagation="REQUIRED" />
+            <tx:method name="insert*" propagation="REQUIRED" />
+            <tx:method name="update*" propagation="REQUIRED" />
+            <tx:method name="merge*" propagation="REQUIRED" />
+            <tx:method name="del*" propagation="REQUIRED" />
+            <tx:method name="remove*" propagation="REQUIRED" />
+            
+            <tx:method name="put*" read-only="true"/>
+            <tx:method name="query*" read-only="true"/>
+            <tx:method name="use*" read-only="true"/>
+            <tx:method name="get*" read-only="true" />
+            <tx:method name="count*" read-only="true" />
+            <tx:method name="find*" read-only="true" />
+            <tx:method name="list*" read-only="true" />
+            
+            <tx:method name="*" propagation="REQUIRED"/>
+        </tx:attributes>
+    </tx:advice>
+     -->
+    <import resource="classpath:applicationContext-shard-dao.xml" />
+</beans>
