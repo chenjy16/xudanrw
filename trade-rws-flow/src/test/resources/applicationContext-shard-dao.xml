@@ -96,7 +96,7 @@
     
       <bean id="writeDataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="jdbc:mysql://10.16.69.69:3306/ins_tc_prd" />
+        <property name="url" value="jdbc:mysql://10.16.69.6:3306/ins" />
         <property name="username" value="root" />
         <property name="password" value="Midea_2014@TC" />
         <property name="maxActive"><value>20</value></property>   
@@ -116,7 +116,7 @@
     
     <bean id="readDataSource1" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="jdbc:mysql://10.16.69.70:3306/ins_tc_prd" />
+        <property name="url" value="jdbc:mysql://10.16.69.7:3306/ins" />
         <property name="username" value="root" />
         <property name="password" value="Midea_2014@TC" />
         <property name="maxActive"><value>20</value></property>   
@@ -137,7 +137,7 @@
     
     <bean id="readDataSource2" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="jdbc:mysql://10.16.69.70:3306/ins_tc_prd" />
+        <property name="url" value="jdbc:mysql://10.16.69.7:3306/ins" />
         <property name="username" value="root" />
         <property name="password" value="Midea_2014@TC" />
         <property name="maxActive"><value>20</value></property>   
@@ -177,7 +177,7 @@
            
     <bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="jdbc:mysql://10.16.11.200:3306/ins_tc_prd" />
+        <property name="url" value="jdbc:mysql://10.16.11.:3306/ins_" />
         <property name="username" value="kudiaosi" />
         <property name="password" value="kudiaosi0" />
         <property name="maxActive"><value>20</value></property>   
@@ -198,7 +198,7 @@
     
     <bean id="dataSource1" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="jdbc:mysql://172.16.14.168:3306/ins_tc_prd" />
+        <property name="url" value="jdbc:mysql://172.16.14.2:3306/ins_" />
         <property name="username" value="root" />
         <property name="password" value="Midea_2014@TC" />
         <property name="maxActive"><value>20</value></property>   
@@ -219,7 +219,7 @@
     
     <bean id="dataSource2" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-           <property name="url" value="jdbc:mysql://10.16.11.200:3306/ins_tc_prd" />
+           <property name="url" value="jdbc:mysql://10.16.11.2:3306/ins" />
         <property name="username" value="kudiaosi" />
         <property name="password" value="kudiaosi0" />
         <property name="maxActive"><value>20</value></property>   
