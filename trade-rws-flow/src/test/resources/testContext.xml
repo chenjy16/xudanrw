@@ -22,8 +22,8 @@
     <bean id="writeDataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
         <property name="url" value="jdbc:mysql://10.16.11.20:3306/ins_tc" />
-        <property name="username" value="kudiaosi" />
-        <property name="password" value="kudiaosi0" />
+        <property name="username" value="e" />
+        <property name="password" value="e" />
         <property name="maxActive"><value>20</value></property>   
         <property name="initialSize"><value>5</value></property>   
         <property name="maxWait"><value>30000</value></property>        <!-- 超时等待时间  以毫秒为单位 --> 
@@ -42,8 +42,8 @@
     <bean id="readDataSource1" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
         <property name="url" value="jdbc:mysql://172.16.14.16:3306/ins" />
-        <property name="username" value="root" />
-        <property name="password" value="Midea_2014@TC" />
+        <property name="username" value="e" />
+        <property name="password" value="e@ee" />
         <property name="maxActive"><value>20</value></property>   
         <property name="initialSize"><value>5</value></property>   
         <property name="maxWait"><value>30000</value></property>        <!-- 超时等待时间  以毫秒为单位 --> 
@@ -63,8 +63,8 @@
     <bean id="readDataSource2" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
         <property name="url" value="jdbc:mysql://172.16.14.1:3306/ins_tc" />
-        <property name="username" value="root" />
-        <property name="password" value="Midea_2014@TC" />
+        <property name="username" value="e" />
+        <property name="password" value="eC" />
         <property name="maxActive"><value>20</value></property>   
         <property name="initialSize"><value>5</value></property>   
         <property name="maxWait"><value>30000</value></property>        <!-- 超时等待时间  以毫秒为单位 --> 
