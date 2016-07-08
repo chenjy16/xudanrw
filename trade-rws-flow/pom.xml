@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
    <modelVersion>4.0.0</modelVersion>
-	<groupId>com.midea.trade.rws</groupId>
+	<groupId>com.trade.rws</groupId>
 	<artifactId>trade-rws</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
@@ -155,16 +155,16 @@
 		</plugins>
 	</build>
 	  <distributionManagement>
-		<snapshotRepository>
-			<id>nexus-snapshots</id>
-			<name>nexus distribution snapshot repository</name>
-			<url>http://10.16.11.201:9000/nexus/content/repositories/snapshots/</url>
-		</snapshotRepository>
 		<repository>
-			<id>nexus-releases</id>
-			<name>nexus distribution release repository</name>
-			<url>http://10.16.11.201:9000/nexus/content/repositories/releases/</url>
+			<id>pay_release_repo</id>
+			<name>release Repository</name>
+			<url>http://120.26.44.237:8088/nexus/content/repositories/pay_release_repo/</url>
 		</repository>
+		<snapshotRepository>
+			<id>pay_snaphost_repo</id>
+			<name>snapshot Repository</name>
+			<url>http://120.26.44.237:8088/nexus/content/repositories/pay_snaphost_repo/</url>
+		</snapshotRepository>
 	</distributionManagement>
 	
 </project>

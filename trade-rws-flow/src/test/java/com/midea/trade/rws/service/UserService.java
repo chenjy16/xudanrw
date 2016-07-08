@@ -1,6 +1,6 @@
 package com.midea.trade.rws.service;
 
-import com.midea.trade.rws.annotation.DataSource;
+import com.trade.rws.annotation.DataSource;
 
 
 

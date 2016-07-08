@@ -5,8 +5,8 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.midea.trade.rws.annotation.DataSource;
 import com.midea.trade.rws.mapper.UserMapper;
+import com.trade.rws.annotation.DataSource;
 
 
 @Service("userService")

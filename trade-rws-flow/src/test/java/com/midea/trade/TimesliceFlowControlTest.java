@@ -1,7 +1,8 @@
 package com.midea.trade;
 import junit.framework.Assert;
 import org.junit.Test;
-import com.midea.trade.rws.util.TimesliceFlowControl;
+
+import com.trade.rws.util.TimesliceFlowControl;
 
 public class TimesliceFlowControlTest {
 

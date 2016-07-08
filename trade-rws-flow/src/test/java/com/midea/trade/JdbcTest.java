@@ -10,10 +10,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import com.midea.trade.rws.group.TGroupDataSource;
 import com.midea.trade.rws.mapper.UserMapper;
 import com.midea.trade.rws.service.UserService;
-import com.midea.trade.rws.util.GroupDataSourceRouteHelper;
+import com.trade.rws.group.TGroupDataSource;
+import com.trade.rws.util.GroupDataSourceRouteHelper;
 
 public class JdbcTest extends BaseTest{
 	

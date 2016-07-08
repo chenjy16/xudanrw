@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.midea.trade.rws.util.RouteTableHelper;
+import com.trade.rws.util.RouteTableHelper;
 
 public class MShopExample extends RouteTableHelper{
 	

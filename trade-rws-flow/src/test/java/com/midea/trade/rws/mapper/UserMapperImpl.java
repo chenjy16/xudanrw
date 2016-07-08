@@ -5,7 +5,7 @@ import java.sql.SQLException;
 
 import javax.annotation.Resource;
 
-import com.midea.trade.rws.DynamicDataSource;
+import com.trade.rws.DynamicDataSource;
 
 
 public class UserMapperImpl implements UserMapper {
