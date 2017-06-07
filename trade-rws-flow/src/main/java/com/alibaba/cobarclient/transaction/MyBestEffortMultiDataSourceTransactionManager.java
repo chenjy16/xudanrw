@@ -1,5 +1,4 @@
 package com.alibaba.cobarclient.transaction;
-
 import com.alibaba.cobarclient.Shard;
 import java.util.ArrayList;
 import java.util.List;
