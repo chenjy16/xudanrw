@@ -11,7 +11,7 @@
     
     
     <!-- 扫描注解Bean -->
-    <context:component-scan base-package="com.midea.trade.rws">
+    <context:component-scan base-package="com.trade.rws">
     </context:component-scan>
     
 	<!-- <aop:aspectj-autoproxy expose-proxy="true" /> -->
@@ -21,7 +21,7 @@
         
     <bean id="writeDataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="jdbc:mysql://10.16.11.20:3306/ins_tc" />
+        <property name="url" value="jdbc:mysql://10.1.1.20:3306/ins_tc" />
         <property name="username" value="e" />
         <property name="password" value="e" />
         <property name="maxActive"><value>20</value></property>   
@@ -41,7 +41,7 @@
     
     <bean id="readDataSource1" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="jdbc:mysql://172.16.14.16:3306/ins" />
+        <property name="url" value="jdbc:mysql://1.1.1.1:3306/ins" />
         <property name="username" value="e" />
         <property name="password" value="e@ee" />
         <property name="maxActive"><value>20</value></property>   
@@ -62,7 +62,7 @@
     
     <bean id="readDataSource2" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="jdbc:mysql://172.16.14.1:3306/ins_tc" />
+        <property name="url" value="jdbc:mysql://1.16.14.1:3306/ins_tc" />
         <property name="username" value="e" />
         <property name="password" value="eC" />
         <property name="maxActive"><value>20</value></property>   
@@ -82,14 +82,14 @@
     
     
     
-         <bean id="userMapper" class="com.midea.trade.rws.mapper.UserMapperImpl">
+         <bean id="userMapper" class="com.trade.rws.mapper.UserMapperImpl">
     </bean>
 	    
     <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="groupDataSource"/>
     </bean>
 	    
-	 <bean id="dsconfDO" class="com.midea.trade.rws.util.DsConfDO">
+	 <bean id="dsconfDO" class="com.trade.rws.util.DsConfDO">
 	 	<property name="writeRestrictTimes" value="0"/><!-- 时间范围内写限制次数 -->
 	 	<property name="readRestrictTimes" value="0"/><!-- 时间范围内读限制次数 -->
 	 	<property name="timeSliceInMillis" value="0"/><!-- 时间范围不能小于1000ms -->
@@ -97,9 +97,9 @@
 	 	<property name="maxConcurrentWriteRestrict" value="0"/><!-- 最大并发写限制 -->
 	 </bean>  
 	 
-	    <bean id="fetcher" class="com.midea.trade.rws.util.SpringDataSourceFetcher"/>
+	    <bean id="fetcher" class="com.trade.rws.util.SpringDataSourceFetcher"/>
 	    
-	    <bean id="groupDataSource" class="com.midea.trade.rws.group.TGroupDataSource">
+	    <bean id="groupDataSource" class="com.trade.rws.group.TGroupDataSource">
 	        <constructor-arg name="dsKeyAndWeightCommaArray" value="writeDataSource:wrq1,readDataSource1:rp3,readDataSource2:rp3"/>  
 		    <constructor-arg ref="fetcher"/> 
 		    <constructor-arg ref="dsconfDO"/> 
@@ -108,7 +108,7 @@
     
     
     
-  <!--   <bean id="readWriteDataSource" class="com.midea.trade.rws.DynamicDataSource">
+  <!--   <bean id="readWriteDataSource" class="com.trade.rws.DynamicDataSource">
         <property name="writeDataSource" ref="writeDataSource"/>
         <property name="readDataSourceMap">
            <map>
@@ -121,7 +121,7 @@
     <!-- 
     <aop:config expose-proxy="true">
         只对业务逻辑层实施事务
-        <aop:pointcut id="txPointcut" expression="execution(* com.midea.trade.rws.service.*.*(..))" />
+        <aop:pointcut id="txPointcut" expression="execution(* com.trade.rws.service.*.*(..))" />
          <aop:advisor  order="2" advice-ref="txAdvice" pointcut-ref="txPointcut"/>
     </aop:config>
     
