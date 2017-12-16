@@ -15,7 +15,7 @@
 		<property name="dataSource" ref="groupDataSource" />
 		<property name="configLocation" value="classpath:myplug.xml" />
 		<!-- 自动扫描entity目录, 省掉trade-ibatis-sqlMapConfig.xml里的手工配置 -->
-		<property name="typeAliasesPackage" value="com.midea.trade.rws.entity" />
+		<property name="typeAliasesPackage" value="com.trade.rws.entity" />
 		<!-- 显式指定Mapper文件位置 -->
 		<property name="mapperLocations" value="classpath:/sqlmaps/*Mapper.xml" />
 	</bean>
@@ -25,7 +25,7 @@
 		<property name="sqlSessionFactoryBeanName" value="coreSqlSessionFactory"></property>
 		<property name="basePackage" value="com.midea.trade.rws.mapper" />
 		<property name="annotationClass"
-			value="com.midea.trade.rws.mapper.annotation.IRepository" />
+			value="com.trade.rws.mapper.annotation.IRepository" />
 	</bean>
 
 </beans>
