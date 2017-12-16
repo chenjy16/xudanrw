@@ -14,10 +14,10 @@
     
         
     <!-- 扫描注解Bean -->
-    <context:component-scan base-package="com.midea.trade.rws">
+    <context:component-scan base-package="com.trade.rws">
     </context:component-scan> 	
     
-    <bean id="hashFunction" class="com.midea.trade.HashFunction"></bean>
+    <bean id="hashFunction" class="com.trade.HashFunction"></bean>
         
     <bean id="router" class="com.alibaba.cobarclient.config.SimpleRouterFactoryBean">
     		<!-- functionsMap是在使用自定义路由规则函数的时候使用 -->
@@ -38,9 +38,9 @@
     
      <!--mybatis扫描指定的接口包-->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="com.midea.trade.rws.mapper" />
+		<property name="basePackage" value="com.trade.rws.mapper" />
 		<property name="annotationClass"
-			value="com.midea.trade.rws.mapper.annotation.IRepository" />
+			value="com.trade.rws.mapper.annotation.IRepository" />
     </bean>
     
     
@@ -56,7 +56,7 @@
         <!--默认数据源,没有找到路由规则的时候向这个库读写数据-->
         <property name="dataSource" ref="dataSource"/>
 		<!-- 自动扫描entity目录, 省掉trade-ibatis-sqlMapConfig.xml里的手工配置 -->
-		<property name="typeAliasesPackage" value="com.midea.trade.rws.entity" />
+		<property name="typeAliasesPackage" value="com.trade.rws.entity" />
         <property name="mapperLocations" value="classpath*:/sqlmaps/*Mapper.xml"/>
     </bean>
     
@@ -96,7 +96,7 @@
     
       <bean id="writeDataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="jdbc:mysql://10.16.69.6:3306/ins" />
+        <property name="url" value="jdbc:mysql://1.1.6.6:3306/ins" />
         <property name="username" value="root" />
         <property name="password" value="w" />
         <property name="maxActive"><value>20</value></property>   
@@ -137,7 +137,7 @@
     
     <bean id="readDataSource2" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="jdbc:mysql://10.16.69.7:3306/ins" />
+        <property name="url" value="jdbc:mysql://1.1.6.7:3306/ins" />
         <property name="username" value="root" />
         <property name="password" value="w" />
         <property name="maxActive"><value>20</value></property>   
@@ -198,7 +198,7 @@
     
     <bean id="dataSource1" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="jdbc:mysql://172.16.14.2:3306/ins_" />
+        <property name="url" value="jdbc:mysql://1.1.14.2:3306/ins_" />
         <property name="username" value="3" />
         <property name="password" value="33" />
         <property name="maxActive"><value>20</value></property>   
@@ -219,7 +219,7 @@
     
     <bean id="dataSource2" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-           <property name="url" value="jdbc:mysql://10.16.11.2:3306/ins" />
+           <property name="url" value="jdbc:mysql://1.1.1.2:3306/ins" />
         <property name="username" value="3" />
         <property name="password" value="3" />
         <property name="maxActive"><value>20</value></property>   
