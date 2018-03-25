@@ -1,5 +1,12 @@
 # xudanrw
 一个灵活的读写分离组件
+
+![Image text](https://github.com/chenjy16/xudanrw/xudanrw.png)
+
+
+
+
+
 1、组件说明：
 
 本组件适用于一主多从数据库读写分离,功能如下:
