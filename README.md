@@ -1,7 +1,7 @@
 # xudanrw
 一个灵活的读写分离组件
 
-![Image text](https://github.com/chenjy16/xudanrw/xudanrw.png)
+![Image text](https://github.com/chenjy16/xudanrw/blob/master/xudanrw.png)
 
 
 
