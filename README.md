@@ -1,6 +1,8 @@
 # xudanrw
 一个灵活的读写分离组件
 
+目前生产环境版本：1.0.1
+
 ![Image text](https://github.com/chenjy16/xudanrw/blob/master/xudanrw.png)
 
 
