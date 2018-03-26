@@ -23,9 +23,9 @@
 	<!-- 扫描basePackage下所有以@MyBatisRepository标识的 接口 -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="sqlSessionFactoryBeanName" value="coreSqlSessionFactory"></property>
-		<property name="basePackage" value="com.midea.trade.rws.mapper" />
+		<property name="basePackage" value="com.clarity.rws.mapper" />
 		<property name="annotationClass"
-			value="com.trade.rws.mapper.annotation.IRepository" />
+			value="com.clarity.rws.mapper.annotation.IRepository" />
 	</bean>
 
 </beans>
