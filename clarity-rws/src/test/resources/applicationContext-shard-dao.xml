@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util"
+	
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+     http://www.springframework.org/schema/util  http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+    
+        
+    <!-- 扫描注解Bean -->
+    <context:component-scan base-package="com.trade.rws">
+    </context:component-scan> 	
+    
+    <bean id="hashFunction" class="com.trade.HashFunction"></bean>
+        
+    <bean id="router" class="com.alibaba.cobarclient.config.SimpleRouterFactoryBean">
+    		<!-- functionsMap是在使用自定义路由规则函数的时候使用 -->
+		<property name="functions">
+			<map>
+				<entry key="hash" value-ref="hashFunction"></entry>
+			</map>
+	    </property>
+        <property name="configLocations">
+            <list>
+                <value>classpath:sharding-rules-on-namespace.xml</value>
+            </list>
+        </property>
+        <property name="shards" ref="shardSet"/>
+    </bean>
+    
+    
+    
+     <!--mybatis扫描指定的接口包-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.trade.rws.mapper" />
+		<property name="annotationClass"
+			value="com.trade.rws.mapper.annotation.IRepository" />
+    </bean>
+    
+    
+    
+    <!--因为使用mybatis的一样都是纯注解形式的,喜欢xml配置的话推荐使用ibatis-->
+    <bean id="sqlSession" class="com.raycloud.cobarclient.mybatis.spring.MySqlSessionTemplate">
+        <constructor-arg index="0" ref="sqlSessionFactory"/>
+        <property name="router" ref="router"/>
+        <property name="shards" ref="shardSet"/>
+    </bean>
+    
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--默认数据源,没有找到路由规则的时候向这个库读写数据-->
+        <property name="dataSource" ref="dataSource"/>
+		<!-- 自动扫描entity目录, 省掉trade-ibatis-sqlMapConfig.xml里的手工配置 -->
+		<property name="typeAliasesPackage" value="com.trade.rws.entity" />
+        <property name="mapperLocations" value="classpath*:/sqlmaps/*Mapper.xml"/>
+    </bean>
+    
+
+    <tx:annotation-driven transaction-manager="txManager" proxy-target-class="true"/>
+    
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+    
+    <bean id="txManager"
+          class="com.alibaba.cobarclient.transaction.MyBestEffortMultiDataSourceTransactionManager">
+        <property name="shards" ref="shardSet"/>
+        <property name="transactionSynchronization" value="2"/>
+    </bean>
+
+
+    <util:set id="shardSet" set-class="java.util.LinkedHashSet">
+        <ref local="master"/>
+        <ref local="slave_1"/>
+        <ref local="slave_2"/>
+    </util:set>
+
+    <bean id="master" class="com.alibaba.cobarclient.Shard">
+        <property name="id" value="master"/>
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    
+    <bean id="slave_1" class="com.alibaba.cobarclient.Shard">
+        <property name="id" value="slave_1"/>
+        <property name="dataSource" ref="dataSource1"/>
+    </bean>
+    
+     <bean id="slave_2" class="com.alibaba.cobarclient.Shard">
+        <property name="id" value="slave_2"/>
+        <property name="dataSource" ref="groupDataSource"/>
+    </bean>  
+    
+    
+      <bean id="writeDataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://1.1.6.6:3306/ins" />
+        <property name="username" value="root" />
+        <property name="password" value="w" />
+        <property name="maxActive"><value>20</value></property>   
+        <property name="initialSize"><value>5</value></property>   
+        <property name="maxWait"><value>30000</value></property>        <!-- 超时等待时间  以毫秒为单位 --> 
+        <property name="maxIdle"><value>20</value></property>            <!-- 最大空闲连接 -->
+        <property name="minIdle"><value>5</value></property>             <!-- 最小空闲连接 -->
+        <property name="removeAbandoned"><value>true</value></property>  <!-- 是否自动回收超时连接 --> 
+        <property name="removeAbandonedTimeout"><value>30</value></property>  <!-- 超时时间(以秒数为单位) --> 
+        <property name="testWhileIdle"><value>true</value></property>    <!-- 打开检查,用异步线程evict进行检查 -->   
+        <property name="testOnBorrow"><value>true</value></property>   
+        <property name="testOnReturn"><value>false</value></property>   
+        <property name="validationQuery"><value>select 1</value></property>          
+        <property name="numTestsPerEvictionRun"><value>20</value></property>  
+        <property name="minEvictableIdleTimeMillis"><value>1800000</value></property>        
+    </bean>
+    
+    <bean id="readDataSource1" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://10.16.69.7:3306/ins" />
+        <property name="username" value="root" />
+        <property name="password" value="m" />
+        <property name="maxActive"><value>20</value></property>   
+        <property name="initialSize"><value>5</value></property>   
+        <property name="maxWait"><value>30000</value></property>        <!-- 超时等待时间  以毫秒为单位 --> 
+        <property name="maxIdle"><value>20</value></property>            <!-- 最大空闲连接 -->
+        <property name="minIdle"><value>5</value></property>             <!-- 最小空闲连接 -->
+        <property name="removeAbandoned"><value>true</value></property>  <!-- 是否自动回收超时连接 --> 
+        <property name="removeAbandonedTimeout"><value>30</value></property>  <!-- 超时时间(以秒数为单位) --> 
+        <property name="testWhileIdle"><value>true</value></property>    <!-- 打开检查,用异步线程evict进行检查 -->   
+        <property name="testOnBorrow"><value>true</value></property>   
+        <property name="testOnReturn"><value>false</value></property>   
+        <property name="validationQuery"><value>select 1</value></property>          
+        <property name="numTestsPerEvictionRun"><value>20</value></property>  
+        <property name="minEvictableIdleTimeMillis"><value>1800000</value></property>        
+    </bean>
+    
+    
+    <bean id="readDataSource2" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://1.1.6.7:3306/ins" />
+        <property name="username" value="root" />
+        <property name="password" value="w" />
+        <property name="maxActive"><value>20</value></property>   
+        <property name="initialSize"><value>5</value></property>   
+        <property name="maxWait"><value>30000</value></property>        <!-- 超时等待时间  以毫秒为单位 --> 
+        <property name="maxIdle"><value>20</value></property>            <!-- 最大空闲连接 -->
+        <property name="minIdle"><value>5</value></property>             <!-- 最小空闲连接 -->
+        <property name="removeAbandoned"><value>true</value></property>  <!-- 是否自动回收超时连接 --> 
+        <property name="removeAbandonedTimeout"><value>30</value></property>  <!-- 超时时间(以秒数为单位) --> 
+        <property name="testWhileIdle"><value>true</value></property>    <!-- 打开检查,用异步线程evict进行检查 -->   
+        <property name="testOnBorrow"><value>true</value></property>   
+        <property name="testOnReturn"><value>false</value></property>   
+        <property name="validationQuery"><value>select 1</value></property>          
+        <property name="numTestsPerEvictionRun"><value>20</value></property>  
+        <property name="minEvictableIdleTimeMillis"><value>1800000</value></property>        
+    </bean>
+    
+	 <bean id="dsconfDO" class="com.midea.trade.rws.util.DsConfDO">
+	 	<property name="writeRestrictTimes" value="0"/><!-- 时间范围内写限制次数 -->
+	 	<property name="readRestrictTimes" value="0"/><!-- 时间范围内读限制次数 -->
+	 	<property name="timeSliceInMillis" value="0"/><!-- 时间范围不能小于1000ms -->
+	 	<property name="maxConcurrentReadRestrict" value="0"/><!-- 最大并发读限制 -->
+	 	<property name="maxConcurrentWriteRestrict" value="0"/><!-- 最大并发写限制 -->
+	 </bean>  
+	 
+	    <bean id="fetcher" class="com.midea.trade.rws.util.SpringDataSourceFetcher"/>
+	    
+	    <bean id="groupDataSource" class="com.midea.trade.rws.group.TGroupDataSource">
+	        <constructor-arg name="dsKeyAndWeightCommaArray" value="writeDataSource:wrq1,readDataSource1:rp3,readDataSource2:rp3"/>  
+		    <constructor-arg ref="fetcher"/> 
+		    <constructor-arg ref="dsconfDO"/> 
+		</bean>
+    
+    
+    
+    
+           
+    <bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://10.16.11.2:3306/ins_" />
+        <property name="username" value="3" />
+        <property name="password" value="3" />
+        <property name="maxActive"><value>20</value></property>   
+        <property name="initialSize"><value>5</value></property>   
+        <property name="maxWait"><value>30000</value></property>        <!-- 超时等待时间  以毫秒为单位 --> 
+        <property name="maxIdle"><value>20</value></property>            <!-- 最大空闲连接 -->
+        <property name="minIdle"><value>5</value></property>             <!-- 最小空闲连接 -->
+        <property name="removeAbandoned"><value>true</value></property>  <!-- 是否自动回收超时连接 --> 
+        <property name="removeAbandonedTimeout"><value>30</value></property>  <!-- 超时时间(以秒数为单位) --> 
+        <property name="testWhileIdle"><value>true</value></property>    <!-- 打开检查,用异步线程evict进行检查 -->   
+        <property name="testOnBorrow"><value>true</value></property>   
+        <property name="testOnReturn"><value>false</value></property>   
+        <property name="validationQuery"><value>select 1</value></property>          
+        <property name="numTestsPerEvictionRun"><value>20</value></property>  
+        <property name="minEvictableIdleTimeMillis"><value>1800000</value></property>        
+    </bean>
+
+    
+    <bean id="dataSource1" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://1.1.14.2:3306/ins_" />
+        <property name="username" value="3" />
+        <property name="password" value="33" />
+        <property name="maxActive"><value>20</value></property>   
+        <property name="initialSize"><value>5</value></property>   
+        <property name="maxWait"><value>30000</value></property>        <!-- 超时等待时间  以毫秒为单位 --> 
+        <property name="maxIdle"><value>20</value></property>            <!-- 最大空闲连接 -->
+        <property name="minIdle"><value>5</value></property>             <!-- 最小空闲连接 -->
+        <property name="removeAbandoned"><value>true</value></property>  <!-- 是否自动回收超时连接 --> 
+        <property name="removeAbandonedTimeout"><value>30</value></property>  <!-- 超时时间(以秒数为单位) --> 
+        <property name="testWhileIdle"><value>true</value></property>    <!-- 打开检查,用异步线程evict进行检查 -->   
+        <property name="testOnBorrow"><value>true</value></property>   
+        <property name="testOnReturn"><value>false</value></property>   
+        <property name="validationQuery"><value>select 1</value></property>          
+        <property name="numTestsPerEvictionRun"><value>20</value></property>  
+        <property name="minEvictableIdleTimeMillis"><value>1800000</value></property>        
+    </bean>
+    
+    
+    <bean id="dataSource2" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+           <property name="url" value="jdbc:mysql://1.1.1.2:3306/ins" />
+        <property name="username" value="3" />
+        <property name="password" value="3" />
+        <property name="maxActive"><value>20</value></property>   
+        <property name="initialSize"><value>5</value></property>   
+        <property name="maxWait"><value>30000</value></property>        <!-- 超时等待时间  以毫秒为单位 --> 
+        <property name="maxIdle"><value>20</value></property>            <!-- 最大空闲连接 -->
+        <property name="minIdle"><value>5</value></property>             <!-- 最小空闲连接 -->
+        <property name="removeAbandoned"><value>true</value></property>  <!-- 是否自动回收超时连接 --> 
+        <property name="removeAbandonedTimeout"><value>30</value></property>  <!-- 超时时间(以秒数为单位) --> 
+        <property name="testWhileIdle"><value>true</value></property>    <!-- 打开检查,用异步线程evict进行检查 -->   
+        <property name="testOnBorrow"><value>true</value></property>   
+        <property name="testOnReturn"><value>false</value></property>   
+        <property name="validationQuery"><value>select 1</value></property>          
+        <property name="numTestsPerEvictionRun"><value>20</value></property>  
+        <property name="minEvictableIdleTimeMillis"><value>1800000</value></property>        
+    </bean>   
+    
+    
+    <bean id="userMapper" class="com.midea.trade.rws.mapper.UserMapperImpl">
+    </bean>
+</beans>
