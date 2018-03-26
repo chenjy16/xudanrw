@@ -3,6 +3,7 @@ package com.midea.trade;
 
 import javax.annotation.Resource;
 
+
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +11,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.midea.trade.rws.service.MShopService;
-import com.raycloud.cobarclient.mybatis.spring.MySqlSessionTemplate;
 
 public class MybatisTest extends BaseTest{
 	
@@ -19,8 +19,7 @@ public class MybatisTest extends BaseTest{
 	@Resource(name="mShopService")
 	MShopService mShopService;
 	
-	@Resource(name="sqlSession")
-	MySqlSessionTemplate sqlSession;
+
 	
 	private static Logger logger = LoggerFactory.getLogger(MybatisTest.class);
 	
