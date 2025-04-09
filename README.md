@@ -29,7 +29,10 @@ In a group of equivalent databases (usually only one primary write database with
 
 Specifying Database Access (Hint):
 This is an alternative way to specify which database to access. By placing a comment before the SQL query, you can instruct the TDDL dynamic datasource which database to use. For example:
+
+
 /*+TDDL_GROUP({groupIndex:12})*/select * from tab;
+
 
 
 2. Dependencies
@@ -81,6 +84,7 @@ You will need to include the following dependencies in your project:
 
 
 3. Component Configuration
+   
 DataSource Configuration
 First, configure both the write (primary) and read (slave) datasources. For example:
 
@@ -169,14 +173,12 @@ Next, inject the above datasources into the dynamic datasource:
 </bean>
 
 
-Configuration Rules
-The configuration rules are as follows:
+4. Configuration Rules
+Determining DataSource for Reads and Writes
+The selection of a datasource is based on the priority indicated by the letters p (for read priority) or q (for write priority), which decide whether the datasource is used for read, write, or both. Then, the letters r or w determine the probability (weight) with which the corresponding read or write datasource is selected.
 
-Determining DataSource for Reads and Writes:
-The selection of a datasource is based on the priority indicated by the letters p (for priority) or q, which decide whether the datasource is used for read, write, or both. Then the letters r or w determine the probability (weight) with which the corresponding read or write datasource is selected.
-
-Weight Example:
-For example, given the configurations:
+Weight Example
+For example, given the following configurations:
 
 db1: r10w10p2
 
@@ -200,8 +202,7 @@ p2: Contains [db1, db2]
 
 When performing a read, the datasources in the highest priority group (p3) are attempted first (in this case, db3). If db3 cannot handle the read operation, a datasource is randomly chosen from db1 and db2. Given that db2 has a read weight of 20 versus db1’s 10, db2 has a higher probability of being selected.
 
-Letter Meanings:
-
+Letter Meanings
 r/R: Indicates that the database can be used for read operations. The subsequent number specifies the read weight; if omitted, it defaults to 10.
 
 w/W: Indicates that the database can be used for write operations. The subsequent number specifies the write weight; if omitted, it defaults to 10.
@@ -209,21 +210,6 @@ w/W: Indicates that the database can be used for write operations. The subsequen
 p/P: Indicates the read operation priority. A higher number means a higher priority. If omitted, the default priority is 0.
 
 q/Q: Indicates the write operation priority. A higher number means a higher priority. If omitted, the default priority is 0.
-
-i/I: Indicates the dynamic DBIndex. This works together with the DB index specified by the user via ThreadLocal, enabling more flexible routing on top of the read/write separation.
-For example, if configured as:
-
-db0:i0i2
-
-db1:i1
-
-db2:i1
-
-db3:i2
-
-When the user specifies dbIndex=0, routing will select db0 (only db0 has i0);
-When dbIndex=1 is specified, it will randomly select between db1 and db2 (both have i1);
-When dbIndex=2 is specified, it will randomly select between db0 and db3 (both have i2).
 
 
 
